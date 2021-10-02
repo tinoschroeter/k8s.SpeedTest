@@ -1,0 +1,6 @@
+namespace: speedtest
+resources:
+  - pvc.yaml
+  - services.yaml
+  - config.yaml
+  - speedtest.yaml

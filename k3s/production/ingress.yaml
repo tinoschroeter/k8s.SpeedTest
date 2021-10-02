@@ -1,0 +1,26 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/proxy-body-size: 100m
+  name: speedtest-ingress
+  namespace: speedtest
+spec:
+  rules:
+  - host: speedtest.tino.sh
+    http:
+      paths:
+      - pathType: Prefix
+        path: /
+        backend:
+          service:
+            name: speedtest-service
+            port: 
+              number: 7777
+  tls:
+  - hosts:
+    - speedtest.tino.sh
+    secretName: speedtest-tino-sh-tls

@@ -1,0 +1,10 @@
+apiVersion: skaffold/v1
+kind: Config
+build:
+  artifacts:
+  - image: registry.tino.sh/speedtest
+    context: ../../
+    docker:
+      target: speedtest
+deploy:
+  kustomize: {}
