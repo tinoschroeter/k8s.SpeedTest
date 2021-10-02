@@ -16,7 +16,7 @@ pipeline {
         stage('Build Production') {
             steps {
                 echo 'Build Production....'
-                sh("if [ $GIT_BRANCH == 'master' ]; then cd k3s/production/ && skaffold run; fi")
+                sh("if [ ${GIT_BRANCH} == 'master' ]; then cd k3s/production/ && skaffold run; fi")
             }
         }
     }
