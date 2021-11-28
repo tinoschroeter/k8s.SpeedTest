@@ -1,23 +1,62 @@
 pipeline {
-    agent any
-
-    stages {
-        stage('Build Dev') {
-            steps {
-                echo 'Build Dev..'
-                sh("if [ -d 'k3s/dev' ]; then cd k3s/dev/ && skaffold run; fi")
-            }
+  agent any
+  stages {
+      stage('Linting') {
+          steps {
+          echo 'linting..'
+          }
+      }
+      stage('Build Dev') {
+        when { 
+          branch 'dev'
+          anyOf {
+            changeset "backend/**"
+            changeset "frontend/**"
+            changeset "docker/**"
+            changeset "results/**"
+            changeset "Dockerfile"
+            changeset "k3s/base/**"
+            changeset "k3s/dev/**"
+          }
         }
-        stage('Test') {
-            steps {
-                echo 'Testing..'
-            }
+        steps {
+            echo 'Build Dev..'
+            sh("cd k3s/dev/ && skaffold run")
+        }   
+      }
+      stage('Build Production') {
+        when { 
+          branch 'master'
+          anyOf {
+            changeset "backend/**"
+            changeset "frontend/**"
+            changeset "docker/**"
+            changeset "results/**"
+            changeset "Dockerfile"
+            changeset "k3s/base/**"
+            changeset "k3s/production/**"
+          }
         }
-        stage('Build Production') {
-            steps {
-                echo 'Build Production....'
-                sh("cd k3s/production/ && skaffold run")
-            }
+        steps {
+            echo 'Build Production....'
+            sh("cd k3s/production/ && skaffold run")
+          }  
         }
+      stage('Build Docs') {
+        when { changeset "docs/**" }
+        steps {
+            echo 'Build Docs...'
+          }  
+        }
+      }
+      post {
+        success {
+           echo "Build successfully..."
+           slackSend color: "good", message: "Build successfully on $JOB_NAME..."
+       }
+       failure {
+           echo "Build failed..."
+           slackSend color: "danger", message: "Build failed on $JOB_NAME..."
+       }
     }
 }
