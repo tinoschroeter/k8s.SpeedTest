@@ -1,4 +1,4 @@
-FROM php:7.4-apache AS speedtest
+FROM php:8.1.1-apache AS speedtest
 
 RUN apt-get update && apt-get install -y \
         libfreetype6-dev \
