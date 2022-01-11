@@ -6,7 +6,7 @@ metadata:
   name: speedtest-app
   namespace: speedtest
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: speedtest-app
