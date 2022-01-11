@@ -1,6 +1,6 @@
 FROM php:8.1.1-apache AS speedtest
 
-RUN apt-get update && apt-get install -y libfreetype6-dev=2.10.4* libjpeg62-turbo-dev=1:2.0.6-4* libpng-dev=1.6.37-3* \
+RUN apt-get update && apt-get install -y libfreetype6-dev libjpeg62-turbo-dev libpng-dev \
         && apt-get clean \
         && rm -rf /var/lib/apt/lists/* \
         && docker-php-ext-install -j$(nproc) iconv \
